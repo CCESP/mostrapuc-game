@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class CloudMoviment : MonoBehaviour {
 
-	public float offscreen = 380.0f;
-	public float spawn = -120.0f;
-	public float speed = 0.01f;
-	public float lowest = 195.0f;
-	public float highest = 198.0f;
+	public float speed;
+	public bool direction;
+	public Camera camera = null;
 
 	// Use this for initialization
 	void Start () {
@@ -19,14 +17,20 @@ public class CloudMoviment : MonoBehaviour {
 	void Update () {
 		//amount to move cloud
 		//move enemy
-		transform.Translate(Vector3.right * speed);
-		//respawn with random Y
-		/*if (transform.position.x <= offscreen) {
+		if(direction)
+			transform.Translate(Vector3.right * speed);
+		else
+			transform.Translate(Vector3.left * speed);
+		//
+		Vector3 screenPos;
 
-			Vector3 temp = transform.position;
-			temp.x = spawn;
-			temp.y = Random.Range (highest , lowest);
-			transform.position = temp;
-		}*/
+		screenPos = Camera.main.WorldToScreenPoint(transform.position);
+
+		if (screenPos.x < 0)
+			direction = !direction;
+		else if(screenPos.x > Screen.width)
+			direction = !direction;
+		
+		
 	}
 }

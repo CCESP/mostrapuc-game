@@ -14,6 +14,7 @@ public class TriggerDeBosta : MonoBehaviour {
 		teste.GetComponent<Animator> ().enabled = false;	//Parar a animação
 		teste.GetComponent<Playermoviment>().speed = 0f;	//Para a movimentação do personagem
 		StartScene.SetActive (true);
+
 	}
 	void OnTriggerStay2D(){
 		//Debug.Log ("Caio Rushado! 2");
@@ -21,6 +22,5 @@ public class TriggerDeBosta : MonoBehaviour {
 	void OnTriggerExit2D(){
 		//Debug.Log ("Caio Rushado! 4");
 	}
-
-
+		
 }
