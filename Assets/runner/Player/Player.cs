@@ -26,7 +26,7 @@ public class Player : MonoBehaviour {
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
 			this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,jumpForce));
 			this.jumpCounter--;
-            anim.Play("PlayerJumping");
+            anim.Play("PlayerJumping", -1, 0f);
 		}
 
 		/* Acelerando player pra direita */
