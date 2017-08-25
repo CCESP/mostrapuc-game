@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class ActionButton : MonoBehaviour {
 
+    private LevelManager manager;
+
+    public void Start()
+    {
+        manager = transform.GetComponent<LevelManager>();
+    }
+
 	public void cancel(){
 		Debug.Log ("Cancel");
         retomarMovimentoPersonagem();
     }
 	public void ok(){
 		Debug.Log ("Ok.");
-        retomarMovimentoPersonagem();
-	}
+        manager.loadNextLevel();
+    }
 
     private void retomarMovimentoPersonagem ()
     {
