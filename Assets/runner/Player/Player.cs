@@ -7,12 +7,16 @@ public class Player : MonoBehaviour {
 	public int jumpForce;
 	public int moveVelocity;
 
-	private const int MAX_JUMPS = 2;
+	private const int MAX_JUMPS = 1;
 	private int jumpCounter = 0;
 
+    private Animator anim;
+    private Animation jumpingAnimation;
 
 	void Start () {
 		jumpCounter = MAX_JUMPS;
+        anim = GetComponent<Animator>();
+        jumpingAnimation = GetComponent<Animation>();
 	}
 	
 	void Update ()
@@ -20,8 +24,9 @@ public class Player : MonoBehaviour {
 		if (Input.GetKeyDown("space") && jumpCounter > 0 ) {
 			//removendo todas as forças pra fazer "pulo limpo"
 			this.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
-			this.GetComponent<Rigidbody2D>().AddForce( new Vector2(0,jumpForce));
+			this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,jumpForce));
 			this.jumpCounter--;
+            anim.Play("PlayerJumping");
 		}
 
 		/* Acelerando player pra direita */
@@ -29,31 +34,37 @@ public class Player : MonoBehaviour {
 
 		/* Travando angulo para  objeto nao rotacionar */
 		transform.eulerAngles = new Vector3(0,0,0);
-	
 	}
 
 	private void GameOver ()
 	{
-		GameObject.Destroy (this.gameObject);
-
+		//GameObject.Destroy (this.gameObject);
+        GetComponent<LevelManager>().loadNextLevel();
 	}
 
-
-	void OnTriggerEnter2D (Collider2D c)
+	void OnCollisionEnter2D (Collision2D coll)
 	{
+        Collider2D c = coll.collider;
+
 		//Debug.Log (c.tag);
 		if (c.tag == "Obstacle") {
 			GameOver ();
 		} else if (c.tag == "Walkable Obstacle") {
-			if (this.transform.position.y < (c.transform.position.y + this.GetComponent<BoxCollider2D> ().size.y / 2 + c.GetComponent<BoxCollider2D> ().size.y / 2)) {
+            Vector3 contact = coll.contacts[0].point;
+            Vector3 center = c.bounds.center;
+
+            bool topCollision = Mathf.Abs(Mathf.Abs(contact.y) - Mathf.Abs(center.y)) > 0.5f;
+
+			if (!topCollision) {
 				GameOver ();
 			} else {
 				this.jumpCounter = MAX_JUMPS;
-
-			}
+                anim.Play("PlayerRunning");
+            }
 		} else if (c.tag == "Plataform") {
 			this.jumpCounter = MAX_JUMPS;
-		}
+            anim.Play("PlayerRunning");
+        }
 
 	}
 

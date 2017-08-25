@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockGenerator : MonoBehaviour {
+public class Block : MonoBehaviour {
 
-	public GameObject Obstacle;
-	public GameObject WalkableObstacle;
-	public GameObject SafeBlock;
+    public int size;
 
+	// Use this for initialization
 	void Start () {
 		
 	}

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Block : MonoBehaviour {
-	public int size;
+public class DestroyObstacle : MonoBehaviour {
+
 	// Use this for initialization
 	void Start () {
 		
@@ -13,4 +13,9 @@ public class Block : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    void OnBecameInvisible()
+    {
+        GameObject.Destroy(transform.parent.gameObject);
+    }
 }
