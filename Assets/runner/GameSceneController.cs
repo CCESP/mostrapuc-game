@@ -17,7 +17,7 @@ public class GameSceneController : MonoBehaviour {
     private const float obstacleDistanceSpawn = 7.5f;
 	private const float safeSpawningArea = 25;
 	private const float safeDestroyArea = 30;
-    private const float playerOffsetX = 7.5f;
+    private const float playerOffsetX = 4f;
 
     private float lastScore = 0f;
     private float deltaDistance = 0f;
