@@ -13,7 +13,7 @@ public class GameSceneController : MonoBehaviour {
     public Text scoreText;
 	public GameObject safeBlock;
 
-	private float  gamePointer;
+    private float  gamePointer;
     private const float obstacleDistanceSpawn = 7.5f;
 	private const float safeSpawningArea = 25;
 	private const float safeDestroyArea = 30;
@@ -43,7 +43,6 @@ public class GameSceneController : MonoBehaviour {
                 Block block = blockObject.GetComponent<Block> ();
 				blockObject.transform.position = new Vector3 (gamePointer + block.size / 2, -3.21f, 11);
 				gamePointer += block.size;
-				Debug.Log(block.size);
 				generatedBlocks.AddLast (blockObject);
 			}
 
