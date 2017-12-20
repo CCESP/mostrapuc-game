@@ -13,28 +13,47 @@ public class Player : MonoBehaviour {
     private Animator anim;
     private Animation jumpingAnimation;
 
+    public bool running = false;
+
+    public void EnablePlayer ()
+    {
+        running = true;
+        this.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        this.GetComponent<Animator>().enabled = true;
+    }
+
+    public void DisablePlayer()
+    {
+        running = false;
+        this.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+        this.GetComponent<Animator>().enabled = false;
+    }
+
 	void Start () {
-		jumpCounter = MAX_JUMPS;
+        DisablePlayer();
+        jumpCounter = MAX_JUMPS;
         anim = GetComponent<Animator>();
         jumpingAnimation = GetComponent<Animation>();
 	}
 	
 	void Update ()
 	{
-		if (Input.GetKeyDown("space") && jumpCounter > 0 ) {
-			//removendo todas as forças pra fazer "pulo limpo"
-			this.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
-			this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,jumpForce));
-			this.jumpCounter--;
-            anim.Play("PlayerJumping", -1, 0f);
-		}
+        if(running) { 
+		    if ((Input.GetMouseButtonDown(0) || Input.GetKeyDown("space")) && jumpCounter > 0 ) {
+			    //removendo todas as forças pra fazer "pulo limpo"
+			    this.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
+			    this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,jumpForce));
+			    this.jumpCounter--;
+                anim.Play("PlayerJumping", -1, 0f);
+		    }
 
-		/* Acelerando player pra direita */
-		this.GetComponent<Rigidbody2D>().velocity = new Vector2 (moveVelocity , this.GetComponent<Rigidbody2D>().velocity.y);
+		    /* Acelerando player pra direita */
+		    this.GetComponent<Rigidbody2D>().velocity = new Vector2 (moveVelocity , this.GetComponent<Rigidbody2D>().velocity.y);
 
-		/* Travando angulo para  objeto nao rotacionar */
-		transform.eulerAngles = new Vector3(0,0,0);
-	}
+		    /* Travando angulo para  objeto nao rotacionar */
+		    transform.eulerAngles = new Vector3(0,0,0);
+        }
+    }
 
 	private void GameOver ()
 	{
