@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour {
         unspawned = false;
     }
 
-    public void Spawn ()
+    public void Spawn()
     {
         throwing = false;
         spawned = false;
