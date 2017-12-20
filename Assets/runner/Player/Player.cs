@@ -13,23 +13,22 @@ public class Player : MonoBehaviour {
     private Animator anim;
     private Animation jumpingAnimation;
 
-    public bool running = false;
+    private GameSceneController gsc;
 
     public void EnablePlayer ()
     {
-        running = true;
         this.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         this.GetComponent<Animator>().enabled = true;
     }
 
     public void DisablePlayer()
     {
-        running = false;
         this.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         this.GetComponent<Animator>().enabled = false;
     }
 
 	void Start () {
+        gsc = this.transform.parent.gameObject.GetComponent<GameSceneController>();
         DisablePlayer();
         jumpCounter = MAX_JUMPS;
         anim = GetComponent<Animator>();
@@ -38,7 +37,7 @@ public class Player : MonoBehaviour {
 	
 	void Update ()
 	{
-        if(running) { 
+        if(gsc.IsRunning()) { 
 		    if ((Input.GetMouseButtonDown(0) || Input.GetKeyDown("space")) && jumpCounter > 0 ) {
 			    //removendo todas as forças pra fazer "pulo limpo"
 			    this.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
@@ -48,18 +47,18 @@ public class Player : MonoBehaviour {
 		    }
 
 		    /* Acelerando player pra direita */
-		    this.GetComponent<Rigidbody2D>().velocity = new Vector2 (moveVelocity , this.GetComponent<Rigidbody2D>().velocity.y);
+		    this.GetComponent<Rigidbody2D>().velocity = new Vector2 (moveVelocity, this.GetComponent<Rigidbody2D>().velocity.y);
 
 		    /* Travando angulo para  objeto nao rotacionar */
 		    transform.eulerAngles = new Vector3(0,0,0);
         }
     }
 
-	private void GameOver ()
+	private void GameOver (bool win)
 	{
-		//GameObject.Destroy (this.gameObject);
-        GetComponent<LevelManager>().loadNextLevel();
-	}
+        DisablePlayer();
+        gsc.GameOver(win);
+    }
 
 	void OnCollisionEnter2D (Collision2D coll)
 	{
@@ -67,7 +66,7 @@ public class Player : MonoBehaviour {
 
 		//Debug.Log (c.tag);
 		if (c.tag == "Obstacle") {
-			GameOver ();
+			GameOver(false);
 		} else if (c.tag == "Walkable Obstacle") {
             Vector3 contact = coll.contacts[0].point;
             Vector3 center = c.bounds.center;
@@ -75,7 +74,7 @@ public class Player : MonoBehaviour {
             bool topCollision = Mathf.Abs(Mathf.Abs(contact.y) - Mathf.Abs(center.y)) > 0.5f;
 
 			if (!topCollision) {
-				GameOver ();
+				GameOver(false);
 			} else {
 				this.jumpCounter = MAX_JUMPS;
                 anim.Play("PlayerRunning");

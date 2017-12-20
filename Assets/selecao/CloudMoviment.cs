@@ -21,7 +21,7 @@ public class CloudMoviment : MonoBehaviour {
 			transform.Translate(Vector3.right * speed);
 		else
 			transform.Translate(Vector3.left * speed);
-		//
+		
 		Vector3 screenPos;
 
 		screenPos = Camera.main.WorldToScreenPoint(transform.position);
@@ -30,7 +30,5 @@ public class CloudMoviment : MonoBehaviour {
 			direction = !direction;
 		else if(screenPos.x > Screen.width)
 			direction = !direction;
-		
-		
 	}
 }

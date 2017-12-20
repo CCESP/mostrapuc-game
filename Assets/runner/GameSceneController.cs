@@ -23,35 +23,58 @@ public class GameSceneController : MonoBehaviour {
     
     private float lastScore = 0f;
     private float deltaDistance = 0f;
-    
+
+    private bool running = false;
+
 	//Manter referencia dos blocos gerados para destrui-los
 	private LinkedList<GameObject> generatedBlocks = new LinkedList<GameObject>();
 
-	void Start () {
-		generatedBlocks.AddLast(safeBlock);
-        CountdownToBegin();
+    public bool IsRunning ()
+    {
+        return running;
     }
 
-    void CountdownToBegin()
+	void Start () {
+        running = false;
+		generatedBlocks.AddLast(safeBlock);
+        countdownLabelText.text = "Iniciando corrida em:";
+        CountdownText(true);
+    }
+
+    public void GameOver(bool win)
+    {
+        running = false;
+        countdownLabelText.text = "Você perdeu! Retornando a tela inicial em:";
+        CountdownText(false);
+    }
+
+    void CountdownText(bool newGame)
     {
         countdownText.text = maxCountToBegin + "";
         countdownText.enabled = true;
         countdownLabelText.enabled = true;
         for (int i = maxCountToBegin; i >= 0; i--)
         {
-            StartCoroutine(DisplayCountNumber(i));
+            StartCoroutine(DisplayCountNumber(i, newGame));
         }
     }
 
-    private IEnumerator DisplayCountNumber(int number)
+    private IEnumerator DisplayCountNumber(int number, bool newGame)
     {
         yield return new WaitForSeconds(maxCountToBegin - number);
 
         if (number == 0) {
-            player.EnablePlayer();
-            countdownText.enabled = false;
-            countdownLabelText.enabled = false;
-            scoreText.enabled = true;
+
+            if(newGame) {
+                player.EnablePlayer();
+                countdownText.enabled = false;
+                countdownLabelText.enabled = false;
+                scoreText.enabled = true;
+                running = true;
+            } else {
+                GetComponent<LevelManager>().loadNextLevel();
+            }
+
         } else {
             countdownText.text = number + "";
         }
