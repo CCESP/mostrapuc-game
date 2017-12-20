@@ -6,7 +6,8 @@ using UnityEngine;
 public class GameSceneController : MonoBehaviour {
 
 	public Player player;
-	public Camera gameCamera;
+    public Enemy enemy;
+    public Camera gameCamera;
 	public GameObject floorPrefab;
     public GameObject[] obstaclePrefab;
     public Text scoreText;
@@ -71,7 +72,9 @@ public class GameSceneController : MonoBehaviour {
                 countdownLabelText.enabled = false;
                 scoreText.enabled = true;
                 running = true;
-            } else {
+                enemy.Spawn();
+            }
+            else {
                 GetComponent<LevelManager>().loadNextLevel();
             }
 
