@@ -25,6 +25,8 @@ public class Enemy : MonoBehaviour {
 
     private Vector3 velocity;
 
+    public GameObject projectilePrefab;
+
     // Use this for initialization
     void Start () {
         gsc = this.transform.parent.gameObject.GetComponent<GameSceneController>();
@@ -55,7 +57,19 @@ public class Enemy : MonoBehaviour {
 
     void ThrowCurriculo() {
         throwing = true;
-        StartCoroutine(InternalUnspawn());
+        GameObject curriculoProjectile = Instantiate(projectilePrefab);
+        //curriculoProjectile.transform.SetParent(this.transform);
+        curriculoProjectile.transform.position = this.transform.position;
+        //curriculoProjectile.GetComponent<Rigidbody2D>().AddForce(new Vector3(-175, 0, 0));
+        curriculoProjectile.GetComponent<Rigidbody2D>().AddForce(new Vector3(-250, 7.5f, 0));
+        //StartCoroutine(InternalUnspawn());
+        GameObject[] obstacles = GameObject.FindGameObjectsWithTag("genObstacle");
+        for(int i = 0; i < obstacles.Length; i++)
+        {
+            Collider2D collider = obstacles[i].transform.GetChild(0).GetComponent<Collider2D>();
+            print(collider);
+            Physics2D.IgnoreCollision(curriculoProjectile.GetComponent<Collider2D>(), collider);
+        }
     }
 
     IEnumerator InternalUnspawn()
