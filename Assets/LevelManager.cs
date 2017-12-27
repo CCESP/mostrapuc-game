@@ -4,6 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour {
 
+    public const string START_SCREEN = "p1";
+    public const string STANDS_SCREEN = "p2";
+    public const string RUNNER_SCREEN = "Runner";
+    
     public Canvas canvas;
 
     public void Start()
@@ -11,9 +15,30 @@ public class LevelManager : MonoBehaviour {
         exibirTelaInicial();
     }
 
-	public void loadNextLevel() {
-        int idx = (SceneManager.GetActiveScene().buildIndex + 1) % SceneManager.sceneCountInBuildSettings;
-        SceneManager.LoadScene(idx);
+    private string getNextLevel()
+    {
+        string levelName = SceneManager.GetActiveScene().name;
+        string ret = "";
+
+        switch (levelName)
+        {
+            case START_SCREEN:
+                ret = STANDS_SCREEN;
+                break;
+            case STANDS_SCREEN:
+                ret = RUNNER_SCREEN;
+                break;
+            case RUNNER_SCREEN:
+                ret = START_SCREEN;
+                break;
+        }
+
+        return ret;
+    }
+
+    public void loadNextLevel() {
+        string nextLevel = getNextLevel();
+        SceneManager.LoadScene(nextLevel);
 	}
 
 	public void exibirCreditos(){
