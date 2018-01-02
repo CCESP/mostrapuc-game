@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour {
 
     public const string START_SCREEN = "p1";
-    public const string INTRO_STANDS_SCREEN = "IntroStands";
+    public const string INTRO_SELECAO_SCREEN = "IntroSelecao";
     public const string STANDS_SCREEN = "p2";
     public const string INTRO_RUNNER_SCREEN = "IntroRunner";
     public const string RUNNER_SCREEN = "Runner";
