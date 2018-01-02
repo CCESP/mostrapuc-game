@@ -25,11 +25,17 @@ public class LevelManager : MonoBehaviour {
         switch (levelName)
         {
             case START_SCREEN:
-                ret = STANDS_SCREEN;
+				ret = INTRO_SELECAO_SCREEN;
                 break;
+			case INTRO_SELECAO_SCREEN:
+				ret = STANDS_SCREEN;
+				break;
             case STANDS_SCREEN:
-                ret = RUNNER_SCREEN;
+				ret = INTRO_RUNNER_SCREEN;
                 break;
+			case INTRO_RUNNER_SCREEN:
+				ret = RUNNER_SCREEN;
+				break;
             case RUNNER_SCREEN:
                 ret = START_SCREEN;
                 break;
@@ -43,7 +49,7 @@ public class LevelManager : MonoBehaviour {
         SceneManager.LoadScene(nextLevel);
 	}
 
-	public void exibirCreditos(){
+	public void exibirCreditos() {
         canvas.transform.Find("credits").gameObject.SetActive(true);
         canvas.transform.Find("startScreen").gameObject.SetActive(false);
     }
