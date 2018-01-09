@@ -10,27 +10,23 @@ public class Enemy : MonoBehaviour {
     private float movePosX = -1.81f;
     private float playerDistanceX = 10.25f;
 
-    private float projectileSpawnXDiff = -1.0f;
-
-    private Vector3 projectileOverheadPosition = new Vector3(-250, 7.5f, 0f);
-    private Vector3 projectileGroundPosition = new Vector3(-175, 0, 0);
-
-    private float moveTime = 0.6667f;
     private float unspawnTime = 0.3333f;
 
     private bool throwing = false;
     private bool spawned = false;
     private bool unspawned = false;
 
+	private float moveTime = 0.6667f;
     private Vector3 targetPosition;
+	private Vector3 velocity;
 
     private GameSceneController gsc;
 
     private Transform macaco;
 
-    private Vector3 velocity;
-
     public GameObject projectilePrefab;
+
+	private GameObject onScreenProjectile;
 
     // Use this for initialization
     void Start () {
@@ -62,10 +58,7 @@ public class Enemy : MonoBehaviour {
 
     void ThrowCurriculo() {
         throwing = true;
-        GameObject curriculoProjectile = Instantiate(projectilePrefab);
-        curriculoProjectile.transform.position = this.transform.position;
-        curriculoProjectile.transform.position += new Vector3(projectileSpawnXDiff, 0, 0);
-        curriculoProjectile.GetComponent<Rigidbody2D>().AddForce(new Vector3(-250, 7.5f, 0));
+        onScreenProjectile = Instantiate(projectilePrefab);
         
         StartCoroutine(InternalUnspawn());
 
@@ -73,8 +66,7 @@ public class Enemy : MonoBehaviour {
         for(int i = 0; i < obstacles.Length; i++)
         {
             Collider2D collider = obstacles[i].transform.GetChild(0).GetComponent<Collider2D>();
-            print(collider);
-            Physics2D.IgnoreCollision(curriculoProjectile.GetComponent<Collider2D>(), collider);
+            Physics2D.IgnoreCollision(onScreenProjectile.GetComponent<Collider2D>(), collider);
         }
     }
 
@@ -96,11 +88,11 @@ public class Enemy : MonoBehaviour {
             macaco.localPosition = Vector3.SmoothDamp(macaco.localPosition, targetPosition, ref velocity, moveTime);
             
             if(Mathf.Abs(velocity.x) < 1E-2) {
-                if (!throwing) {
-                    ThrowCurriculo();
-                } else if(unspawned) {
-                    Spawn();
-                }
+				if (!throwing) {
+					ThrowCurriculo ();
+				} else if (unspawned) {
+					Spawn ();
+				}
             }
         }
     }

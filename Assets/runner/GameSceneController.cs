@@ -11,24 +11,34 @@ public class GameSceneController : MonoBehaviour {
 	public GameObject floorPrefab;
     public GameObject[] obstaclePrefab;
     public Text scoreText;
+	public Text goalText;
 	public GameObject safeBlock;
     public Text countdownText;
     public Text countdownLabelText;
 
+	private int MAX_GOAL = 9;
     private float  gamePointer;
     private const float obstacleDistanceSpawn = 7.5f;
 	private const float safeSpawningArea = 25;
 	private const float safeDestroyArea = 30;
     private const float playerOffsetX = 4f;
     private const int maxCountToBegin = 3;
-    
-    private float lastScore = 0f;
+
+	private int currentGoal = 0;
+	private int score = 0;
+	private int extraScore = 0;
+    private float lastDist = 0f;
     private float deltaDistance = 0f;
 
     private bool running = false;
 
 	//Manter referencia dos blocos gerados para destrui-los
 	private LinkedList<GameObject> generatedBlocks = new LinkedList<GameObject>();
+
+	public void AddGoalScore(int n) {
+		currentGoal = Mathf.Min(MAX_GOAL, currentGoal + 1);
+		extraScore += Mathf.Abs(n);
+	}
 
     public bool IsRunning ()
     {
@@ -101,17 +111,18 @@ public class GameSceneController : MonoBehaviour {
 			}
 
             //Settando Score
-            float score;
+			float dist;
 
             if (player.transform.position.x > 0)
-				score = player.transform.position.x;
+				dist = player.transform.position.x;
 			else
-				score = 0f;
+				dist = 0f;
 
             // verificando se spawna obstáculo
-            deltaDistance += (score - lastScore);
+			deltaDistance += (dist - lastDist);
 
-            lastScore = score;
+            lastDist = dist;
+			score = (int) dist;
 
             if (deltaDistance > obstacleDistanceSpawn)
             {
@@ -122,7 +133,8 @@ public class GameSceneController : MonoBehaviour {
                 obstacleObject.transform.position = new Vector3(gameCamera.transform.position.x + obstacleObject.transform.position.x, obstacleObject.transform.position.y, 11);
             }
 
-            scoreText.text = "Score: " + Mathf.Floor (score);
+            scoreText.text = "Pontos: " + Mathf.Floor (score + extraScore);
+			goalText.text = "Documento: " + currentGoal + "/" + MAX_GOAL;
 
 			//Destruindo primeiro bloco da lista caso esteja longe
 			GameObject firstBlock = generatedBlocks.First.Value;

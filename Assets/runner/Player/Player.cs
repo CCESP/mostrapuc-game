@@ -10,6 +10,8 @@ public class Player : MonoBehaviour {
 	private const int MAX_JUMPS = 1;
 	private int jumpCounter = 0;
 
+	private int SCORE_PER_PROJECTILE = 100;
+
     private Animator anim;
     private Animation jumpingAnimation;
 
@@ -60,29 +62,37 @@ public class Player : MonoBehaviour {
         gsc.GameOver(win);
     }
 
+	void OnTriggerEnter2D (Collider2D c) {
+		if (c.tag == "Curriculo") {
+			gsc.AddGoalScore(SCORE_PER_PROJECTILE);
+			Destroy(c.gameObject);
+		}
+	}
+
 	void OnCollisionEnter2D (Collision2D coll)
 	{
         Collider2D c = coll.collider;
 
 		//Debug.Log (c.tag);
 		if (c.tag == "Obstacle") {
-			GameOver(false);
+			GameOver (false);
 		} else if (c.tag == "Walkable Obstacle") {
-            Vector3 contact = coll.contacts[0].point;
-            Vector3 center = c.bounds.center;
+			Vector3 contact = coll.contacts [0].point;
+			Vector3 center = c.bounds.center;
 
-            bool topCollision = Mathf.Abs(Mathf.Abs(contact.y) - Mathf.Abs(center.y)) > 0.5f;
+			bool topCollision = Mathf.Abs (Mathf.Abs (contact.y) - Mathf.Abs (center.y)) > 0.5f;
 
 			if (!topCollision) {
-				GameOver(false);
+				GameOver (false);
 			} else {
 				this.jumpCounter = MAX_JUMPS;
-                anim.Play("PlayerRunning");
-            }
+				anim.Play ("PlayerRunning");
+			}
+
 		} else if (c.tag == "Plataform") {
 			this.jumpCounter = MAX_JUMPS;
-            anim.Play("PlayerRunning");
-        }
+			anim.Play ("PlayerRunning");
+		}
 
 	}
 
