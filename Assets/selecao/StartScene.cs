@@ -7,7 +7,9 @@ public class StartScene : MonoBehaviour {
 
 	// atribuído no editor; DialogoModalStand
 	public GameObject nextScene;
-    
+
+    public GameObject macaco;
+
     private Hashtable dadosEmpresas = new Hashtable(); 
 
 	void Start(){
@@ -15,6 +17,7 @@ public class StartScene : MonoBehaviour {
         criarRefEmpresas();
 
 		nextScene.SetActive(false);
+        macaco.SetActive(false);
 
         // atribui um id a cada stand
         popularStands();

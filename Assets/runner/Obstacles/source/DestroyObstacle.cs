@@ -16,6 +16,11 @@ public class DestroyObstacle : MonoBehaviour {
 
     void OnBecameInvisible()
     {
-        GameObject.Destroy(transform.parent.gameObject);
+        if(transform.parent != null) {
+            GameObject.Destroy(transform.parent.gameObject);
+        } else
+        {
+            GameObject.Destroy(this);
+        }
     }
 }

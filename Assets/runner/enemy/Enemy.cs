@@ -10,6 +10,11 @@ public class Enemy : MonoBehaviour {
     private float movePosX = -1.81f;
     private float playerDistanceX = 10.25f;
 
+    private float projectileSpawnXDiff = -1.0f;
+
+    private Vector3 projectileOverheadPosition = new Vector3(-250, 7.5f, 0f);
+    private Vector3 projectileGroundPosition = new Vector3(-175, 0, 0);
+
     private float moveTime = 0.6667f;
     private float unspawnTime = 0.3333f;
 
@@ -58,11 +63,12 @@ public class Enemy : MonoBehaviour {
     void ThrowCurriculo() {
         throwing = true;
         GameObject curriculoProjectile = Instantiate(projectilePrefab);
-        //curriculoProjectile.transform.SetParent(this.transform);
         curriculoProjectile.transform.position = this.transform.position;
-        //curriculoProjectile.GetComponent<Rigidbody2D>().AddForce(new Vector3(-175, 0, 0));
+        curriculoProjectile.transform.position += new Vector3(projectileSpawnXDiff, 0, 0);
         curriculoProjectile.GetComponent<Rigidbody2D>().AddForce(new Vector3(-250, 7.5f, 0));
-        //StartCoroutine(InternalUnspawn());
+        
+        StartCoroutine(InternalUnspawn());
+
         GameObject[] obstacles = GameObject.FindGameObjectsWithTag("genObstacle");
         for(int i = 0; i < obstacles.Length; i++)
         {
