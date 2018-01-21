@@ -9,7 +9,8 @@ public class LevelManager : MonoBehaviour {
     public const string STANDS_SCREEN = "p2";
     public const string INTRO_RUNNER_SCREEN = "IntroRunner";
     public const string RUNNER_SCREEN = "Runner";
-    public const string GAME_OVER_SCREEN = "RunnerResultScreen";
+    public const string RESULT_SCREEN = "RunnerResultScreen";
+    public const string GAME_OVER_SCREEN = "GameOver";
 
     public Canvas canvas;
 
@@ -38,6 +39,9 @@ public class LevelManager : MonoBehaviour {
 				ret = RUNNER_SCREEN;
 				break;
             case RUNNER_SCREEN:
+                ret = RESULT_SCREEN;
+                break;
+            case RESULT_SCREEN:
                 ret = GAME_OVER_SCREEN;
                 break;
             case GAME_OVER_SCREEN:
