@@ -16,7 +16,7 @@ public class GameSceneController : MonoBehaviour {
     public Text countdownText;
     public Text countdownLabelText;
 
-	private int MAX_GOAL = 9;
+	private int MAX_GOAL = ScoreManager.GOAL_STR_LIST.Length;
     private float  gamePointer;
     private const float obstacleDistanceSpawn = 7.5f;
 	private const float safeSpawningArea = 25;
@@ -55,7 +55,7 @@ public class GameSceneController : MonoBehaviour {
     public void GameOver(bool win)
     {
         running = false;
-        countdownLabelText.text = "Você perdeu! Retornando a tela inicial em:";
+        countdownLabelText.text = "Você foi atingido! Exibindo tela de resultados em:";
         CountdownText(false);
     }
 

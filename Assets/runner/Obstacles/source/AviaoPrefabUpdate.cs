@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AviaoPrefabUpdate : MonoBehaviour {
 
-    private const float vooAviaoDiff = 0.02f;
+    private const float vooAviaoDiff = 0.007f;
     private const float velocidadeAviaoDiff = 0.0075f;
 
     private GameSceneController gsc;

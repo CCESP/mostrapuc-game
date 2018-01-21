@@ -83,7 +83,7 @@ public class ActionButton : MonoBehaviour {
             m.localRotation = Quaternion.Euler(0, 0, 0);
         }
 
-        if(micoReady && Input.GetKeyUp(KeyCode.Space))
+        if (micoReady && Input.GetMouseButtonUp(0))
         {
             manager.loadNextLevel();
         }
