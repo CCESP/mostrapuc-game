@@ -36,7 +36,7 @@ public class GameSceneController : MonoBehaviour {
 	private LinkedList<GameObject> generatedBlocks = new LinkedList<GameObject>();
 
 	public void AddGoalScore(int n) {
-		currentGoal = Mathf.Min(MAX_GOAL, currentGoal + 1);
+		ScoreManager.GOAL_LAST_SCORE = currentGoal = Mathf.Min(MAX_GOAL, currentGoal + 1);
 		extraScore += Mathf.Abs(n);
 	}
 
@@ -46,6 +46,7 @@ public class GameSceneController : MonoBehaviour {
     }
 
 	void Start () {
+        ScoreManager.GOAL_LAST_SCORE = currentGoal;
         running = false;
 		generatedBlocks.AddLast(safeBlock);
         countdownLabelText.text = "Iniciando corrida em:";
