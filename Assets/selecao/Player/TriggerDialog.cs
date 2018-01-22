@@ -6,7 +6,7 @@ public class TriggerDialog : MonoBehaviour {
     public string nomeStand;
 
 	void OnTriggerEnter2D(Collider2D other) {
-		StartScene controller = transform.parent.parent.GetComponent<StartScene>();
+		StandsControl controller = transform.parent.parent.GetComponent<StandsControl>();
         controller.ExibeStand(nomeStand);
         GameObject personagem = other.gameObject;
         personagem.GetComponent<Animator> ().enabled = false;   //Parar a animação

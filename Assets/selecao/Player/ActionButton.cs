@@ -62,7 +62,7 @@ public class ActionButton : MonoBehaviour {
         GameObject jogador = GameObject.Find("personagemJogador");
         jogador.GetComponent<Animator>().enabled = true;  // Retoma a animação
         jogador.GetComponent<PlayerMovement>().speed = 4.0f;  // Permite a movimentação do personagem
-        GameObject StartScene = transform.parent.GetComponent<StartScene>().nextScene;
+        GameObject StartScene = transform.parent.GetComponent<StandsControl>().nextScene;
         StartScene.SetActive(false);
     }
 

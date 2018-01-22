@@ -1,20 +1,53 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using SimpleJSON;
 
 // esse objeto é o scene controller da parte selecao do jogo
-public class StartScene : MonoBehaviour {
+public class StandsControl : MonoBehaviour {
 
 	// atribuído no editor; DialogoModalStand
 	public GameObject nextScene;
 
     public GameObject macaco;
 
-    private Hashtable dadosEmpresas = new Hashtable(); 
+    private Hashtable dadosEmpresas = new Hashtable();
+
+    void parseRefEmpresa(string data)
+    {
+        var jsonData = JSON.Parse(data);
+        for(int i = 0; i < jsonData.Count; i++)
+        {
+            var vaga = jsonData[i];
+            Hashtable infoVaga = new Hashtable();
+            infoVaga["nome"] = vaga["empresa"].Value.ToUpper();
+            infoVaga["logo"] = vaga["type"].Value.ToUpper();
+            infoVaga["texto"] = vaga["periodo_beg"].Value.ToUpper();
+            dadosEmpresas[i + ""] = infoVaga;
+        }
+    }
+
+    IEnumerator fetchData()
+    {
+        string url = "http://www.ccesp.puc-rio.br/vagasonline-tools/vagas-rng";
+        WWW www = new WWW(url);
+        yield return www;
+        if (www.error == null || www.error == "")
+        {
+            parseRefEmpresa(www.text);
+        }
+        else
+        {
+            Debug.Log("ERROR: " + www.error);
+        }
+    }
 
 	void Start(){
+
+        StartCoroutine(fetchData());
+
         // cria referencia para os dados das empresas a partir dos IDs
-        criarRefEmpresas();
+        //criarRefEmpresas();
 
 		nextScene.SetActive(false);
         macaco.SetActive(false);
@@ -27,12 +60,9 @@ public class StartScene : MonoBehaviour {
     {
         Transform wrapStands = transform.Find("StandsColisao");
 
-        ArrayList keyList = new ArrayList(dadosEmpresas.Keys);
-
         for (int i = 0; i < wrapStands.childCount; i++)
         {
-            string idx = (string) keyList[i];
-            wrapStands.GetChild(i).GetComponent<TriggerDialog>().nomeStand = idx;
+            wrapStands.GetChild(i).GetComponent<TriggerDialog>().nomeStand = i + "";
         }
             
     }
@@ -76,12 +106,14 @@ Além de intermediar os Estágios e Programas de Trainee, a CCESP atua como prom
     {
         Text goTextoEmpresa = transform.Find("DialogoModalStand/Canvas/ScrollTextControll/ScrollBackGround/selecaoStandTextoEmpresa").GetComponent<Text>();
         Text goNomeEmpresa = transform.Find("DialogoModalStand/Canvas/selecaoStandNomeEmpresa").GetComponent<Text>();
-        Image goLogoEmpresa = transform.Find("DialogoModalStand/Canvas/selecaoStandLogoEmpresa").GetComponent<Image>();
+        //Image goLogoEmpresa = transform.Find("DialogoModalStand/Canvas/selecaoStandLogoEmpresa").GetComponent<Image>();
+        Text goLogoEmpresa = transform.Find("DialogoModalStand/Canvas/selecaoStandLogoEmpresa").GetComponent<Text>();
 
         Hashtable dados = ((Hashtable) dadosEmpresas[id]);
         
-        goTextoEmpresa.text = (string) dados["texto"];
-        goNomeEmpresa.text = (string) dados["nome"];
-        goLogoEmpresa.sprite = Resources.LoadAll<Sprite>((string)dados["logo"])[0] as Sprite;
+        goTextoEmpresa.text = dados["texto"].ToString();
+        goNomeEmpresa.text = dados["nome"].ToString();
+        //goLogoEmpresa.sprite = Resources.LoadAll<Sprite>((string)dados["logo"])[0] as Sprite;
+        goLogoEmpresa.text = dados["logo"].ToString();
     }
 }
