@@ -13,6 +13,8 @@ public class StandsControl : MonoBehaviour {
 
     private Hashtable dadosEmpresas = new Hashtable();
 
+    private const int NUM_EMPRESAS = 12;
+
     void parseRefEmpresa(string data)
     {
         var jsonData = JSON.Parse(data);
@@ -22,7 +24,39 @@ public class StandsControl : MonoBehaviour {
             Hashtable infoVaga = new Hashtable();
             infoVaga["nome"] = vaga["empresa"].Value.ToUpper();
             infoVaga["logo"] = vaga["type"].Value.ToUpper();
-            infoVaga["texto"] = vaga["periodo_beg"].Value.ToUpper();
+            infoVaga["texto"] = "";
+
+            infoVaga["texto"] += "\n<b>Empresa:</b> " + vaga["empresa"].Value;
+
+            infoVaga["texto"] += "\n<b>Tipo:</b> " + vaga["type"].Value;
+
+            infoVaga["texto"] += "\n<b>Número de vagas:</b> " + vaga["job_openings"].Value;
+
+            infoVaga["texto"] += "\n<b>Horário:</b> " + vaga["office_hours"].Value;
+
+            infoVaga["texto"] += "\n<b>Remuneração:</b> R$ " + vaga["remuneration"].Value;
+
+            infoVaga["texto"] += "\n<b>Cursos:</b>\n";
+
+            foreach(var curso in vaga["cursos"])
+            {
+                infoVaga["texto"] += curso.Value + "\n";
+            }
+
+            infoVaga["texto"] += "<b>Período:</b> Entre " + vaga["periodo_beg"].Value + "º e o " + vaga["periodo_end"].Value + "º";
+
+            infoVaga["texto"] += "\n<b>Sexo:</b> " + vaga["gender"].Value;
+
+            infoVaga["texto"] += "\n<b>Local da atividade</b>\n<b>Cidade:</b> " + vaga["city"].Value + "\n<b>Bairro:</b> " + vaga["neighbourhood"].Value;
+
+            infoVaga["texto"] += "\n<b>Atividades:</b>\n" + vaga["activities"].Value;
+
+            infoVaga["texto"] += "\n<b>Benefícios:</b>\n" + vaga["benefits"].Value;
+
+            infoVaga["texto"] += "\n<b>Pré-requisitos:\n</b> " + vaga["requirements"].Value.ToString().Trim();
+
+            infoVaga["texto"] += "\n<b>Procedimentos para se inscrever na vaga:</b>\n" + vaga["procedures"].Value;
+
             dadosEmpresas[i + ""] = infoVaga;
         }
     }
@@ -34,6 +68,13 @@ public class StandsControl : MonoBehaviour {
         yield return www;
         if (www.error == null || www.error == "")
         {
+            // se há menos de N empresas, busca as N últimas através de outro acesso
+            if (JSON.Parse(www.text).Count < NUM_EMPRESAS)
+            {
+                url = "http://www.ccesp.puc-rio.br/vagasonline-tools/vagas-last";
+                www = new WWW(url);
+                yield return www;
+            }
             parseRefEmpresa(www.text);
         }
         else
